@@ -25,6 +25,10 @@ def CREATE_IPQE_CIRCUIT(t, k, phi):
     classical = ClassicalRegister(1)
     circuit = QuantumCircuit(ancilla, system_qubits, classical)
 
+    # Initial state: Hartree-Fock
+    circuit.x(1)
+    circuit.x(2)
+
     circuit.h(0)
 
     my_u_gate = CREATE_U_GATE()
