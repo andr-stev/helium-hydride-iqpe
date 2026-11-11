@@ -14,8 +14,8 @@ def CREATE_U_GATE():
 
     control = QuantumRegister(1, name="ancilla")
     system = QuantumRegister(num_qubits, name="q")
-    classical = ClassicalRegister(1)
-    circuit = QuantumCircuit(control, system, classical)
+
+    circuit = QuantumCircuit(control, system)
 
     # print(len(my_hamil))
     for i in range(len(my_hamil)):
@@ -28,7 +28,4 @@ def CREATE_U_GATE():
         circuit = circuit.compose(trotterized_gate, circuit.qubits)
 
 
-
-    print(circuit.draw("text"))
-
-CREATE_U_GATE()
+    return circuit.to_gate()
