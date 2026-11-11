@@ -85,8 +85,4 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
             circuit.h(qubit_idx)
             circuit.s(qubit_idx)
 
-    print(circuit.draw("text"))
     return circuit.to_gate()
-
-
-CREATE_PAULI_STRING_GATE("XYXY", 1)
