@@ -36,7 +36,7 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
     gate_qubits = QuantumRegister(number_of_qubits, name="q")
 
     # Initialize the quantum circuit with control and gate qubits
-    circuit = QuantumCircuit(control, gate_qubits)
+    circuit = QuantumCircuit(control, gate_qubits, name=f"{pauli_string}")
 
     # Parse the Pauli string and reverse it to process from least significant qubit
     pauli_gates_list = list(pauli_string)
