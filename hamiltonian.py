@@ -1,6 +1,8 @@
+import numpy as np
 from qiskit.quantum_info import SparsePauliOp
 from qiskit_nature.second_q.drivers import PySCFDriver
-from qiskit_nature.second_q.mappers import JordanWignerMapper
+from qiskit_nature.second_q.mappers import InterleavedQubitMapper, JordanWignerMapper
+from qiskit_nature.units import DistanceUnit
 
 
 def HeH_HAMILTONIAN():
@@ -10,16 +12,18 @@ def HeH_HAMILTONIAN():
         basis="sto3g",
         charge=1,  # HeH+ has a +1 charge
         spin=0,
+        unit = DistanceUnit.ANGSTROM
     )
 
     problem = driver.run()
 
-    # Apply Jordan-Wigner mapping with interleaved ordering
-    # interleaved=True enables Z2 symmetry and uses interleaved Pauli-Z operators
+
     mapper = JordanWignerMapper()
+    interleaved_mapper = InterleavedQubitMapper(mapper)
+
 
     # Convert to qubit operator (qubit Hamiltonian)
-    qubit_op = mapper.map(problem.hamiltonian.second_q_op())
+    qubit_op = interleaved_mapper.map(problem.hamiltonian.second_q_op())
     number_of_qubits = qubit_op.num_qubits
 
     identity_pauli_string = "I" * number_of_qubits
