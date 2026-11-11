@@ -32,11 +32,11 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
     number_of_qubits = len(pauli_string)
 
     # Create quantum registers: one control qubit and n gate qubits
-    control = QuantumRegister(1, name="control")
+    # control = QuantumRegister(1, name="control")
     gate_qubits = QuantumRegister(number_of_qubits, name="q")
 
     # Initialize the quantum circuit with control and gate qubits
-    circuit = QuantumCircuit(control, gate_qubits, name=f"{pauli_string}")
+    circuit = QuantumCircuit(gate_qubits, name=f"{pauli_string}")
 
     # Parse the Pauli string and reverse it to process from least significant qubit
     pauli_gates_list = list(pauli_string)
@@ -47,7 +47,7 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
     # Y basis: S^† followed by H gate
     for i in range(number_of_qubits):
         pauli_op = pauli_gates_list[i]
-        qubit_idx = 1 + i  # Account for the control qubit at index 0
+        qubit_idx = i  # Account for the control qubit at index 0
 
         if pauli_op == "X":
             # Hadamard transforms Z-basis to X-basis
@@ -59,23 +59,23 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
 
     # Apply controlled-CNOT gates up the line to entangle the gate qubits
     for k in range(number_of_qubits - 1):
-        control_qubit_idx = number_of_qubits - k
-        target_qubit_idx = number_of_qubits - 1 - k
+        control_qubit_idx = number_of_qubits - 1 - k
+        target_qubit_idx = number_of_qubits - 2 - k
         circuit.cx(control_qubit_idx, target_qubit_idx)
 
     # Apply the controlled Rz rotation on q_0
-    circuit.crz(2 * coefficient, 0, 1)
+    circuit.rz(2 * coefficient, 0)
 
     # Undo the CNOT entanglement
     for k in range(number_of_qubits - 1):
-        control_qubit_idx = 2 + k
-        target_qubit_idx = 1 + k
+        control_qubit_idx = 1 + k
+        target_qubit_idx = k
         circuit.cx(control_qubit_idx, target_qubit_idx)
 
     # Undo basis rotations to restore qubits to original basis
     for i in range(number_of_qubits):
         pauli_op = pauli_gates_list[i]
-        qubit_idx = 1 + i
+        qubit_idx = i
 
         if pauli_op == "X":
             # Hadamard is self-inverse
@@ -85,4 +85,8 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
             circuit.h(qubit_idx)
             circuit.s(qubit_idx)
 
+    print(circuit.draw("text"))
     return circuit.to_gate()
+
+
+CREATE_PAULI_STRING_GATE("XYXY", 1)
