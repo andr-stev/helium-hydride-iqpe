@@ -12,10 +12,9 @@ def CREATE_U_GATE():
 
     num_qubits = my_hamil.num_qubits
 
-    control = QuantumRegister(1, name="ancilla")
     system = QuantumRegister(num_qubits, name="q")
 
-    circuit = QuantumCircuit(control, system)
+    circuit = QuantumCircuit(system)
 
     # print(len(my_hamil))
     for i in range(len(my_hamil)):
