@@ -59,7 +59,11 @@ def CREATE_IPQE_CIRCUIT(t, k, phi):
 
     circuit.measure(0, 0)
 
-    counts = sim.run(transpile(circuit, sim), shots = 1000).result().get_counts()
+    counts = sim.run(transpile(circuit, sim), shots = 1001).result().get_counts()
+
+    if len(counts) == 1:
+        result = list(counts.keys())
+        return result[0]
 
     if counts["0"] > counts["1"]:
         return "0"
