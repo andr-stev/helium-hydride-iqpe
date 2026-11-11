@@ -45,7 +45,7 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
     pauli_gates_list = list(pauli_string)
     pauli_gates_list.reverse()
 
-    print(pauli_gates_list)
+    # print(pauli_gates_list)
 
     # Apply basis rotations for X and Y Pauli operators
     # X basis: H gate (Hadamard)
@@ -101,19 +101,5 @@ def CREATE_PAULI_STRING_GATE(pauli_string: str, coefficient: float) -> Gate:
             circuit.h(qubit_idx)
             circuit.s(qubit_idx)
 
-    print(circuit.draw("text"))
 
     return circuit.to_gate()
-
-hamil_test = HeH_HAMILTONIAN()
-print(hamil_test)
-for i in range(len(hamil_test)):
-    mystring = hamil_test[i].paulis
-    myproperstr = str(mystring[0])
-    mycoeff = numpy.real(hamil_test[i].coeffs)
-
-    CREATE_PAULI_STRING_GATE(str(mystring[0]), mycoeff[0])
-    print("\n\n")
-    #
-
-# CREATE_PAULI_STRING_GATE("XYXY", 1)
